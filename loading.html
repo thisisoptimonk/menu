@@ -153,8 +153,9 @@
     <div class="modal-container">
         <h1 id="status-title">Generálás folyamatban...</h1>
         <p id="status-text">
-            Személyre szabott elemzésed készül. Ne aggódj, az oldal automatikusan frissülni fog, amint elkészültünk.
+            A személyre szabott elemzésed készül. Ne aggódj, az oldal automatikusan frissülni fog, amint elkészült.
         </p>
+        <p>Addig főzz egy kávét! 😊☕</p>
         
         <div class="loader-wrapper">
             <div class="loader"></div>
@@ -167,7 +168,7 @@
             // --- Beállítások ---
             const DESTINATION_URL = 'index.html'; // A célfájl, amit az n8n generál
             const FINAL_PAGE_KEY = 'data-placeholder="pageTitle"'; // Ezt keressük a kész fájlban
-            const POLLING_INTERVAL = 5000; // 5 másodpercenként ellenőriz
+            const POLLING_INTERVAL = 15000; // 5 másodpercenként ellenőriz
             const titleElement = document.getElementById('status-title');
             const textElement = document.getElementById('status-text');
 
@@ -187,7 +188,7 @@
                         // SIKER: Ha a letöltött HTML tartalmazza a kulcsszót
                         if (html.includes(FINAL_PAGE_KEY)) {
                             if (titleElement) titleElement.textContent = 'Siker! Átirányítás...';
-                            if (textElement) textElement.textContent = 'Az elemzésed elkészült, pillanat és mutatjuk.';
+                            if (textElement) textElement.textContent = 'Az elemzésed elkészült, egy pillanat és mutatom.';
                             
                             // Átirányítás a VÉGSŐ oldalra
                             setTimeout(() => {
