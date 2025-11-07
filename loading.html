@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generálás folyamatban...</title>
+    <title>Prezentáció Indítása</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+        /* === Változók === */
         :root {
             --color-background-dark: #121215;
             --color-text-primary: #e0e0e0;
             --color-text-secondary: #aaaaaa;
             --color-primary-orange: #FF8C00;
-            --color-container-bg: rgba(30, 30, 35, 0.7); /* Sötét "üveg" háttér */
-            --color-border: rgba(255, 255, 255, 0.1);
-            --color-shadow-dark: rgba(0, 0, 0, 0.5);
-            --color-shadow-light: rgba(255, 255, 255, 0.05);
+            --color-button-bg: rgba(255, 255, 255, 0.08);
+            --color-button-border: rgba(255, 255, 255, 0.2);
+            --color-button-hover-bg: rgba(255, 255, 255, 0.15);
         }
 
         /* === Alapstílusok === */
@@ -39,68 +39,179 @@
             100% { background-position: 0% 50%; }
         }
 
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             color: var(--color-text-primary);
-            display: flex;
+            display: grid; /* Grid elrendezés a lépések közötti ugrásmentes váltáshoz */
+            grid-template-rows: auto 1fr;
+            grid-template-columns: 1fr;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 1.5rem;
             overflow: hidden;
             position: relative;
+            text-align: center; /* Alapértelmezett középre igazítás */
             
-            /* A háttér: sötét alap + 3 elmosott színfolt (narancs, kék, lila) */
+            /* A háttér: sötét alap + 3 elmosott színfolt */
             background-color: var(--color-background-dark);
             background-image: 
                 radial-gradient(at 80% 90%, hsla(28, 100%, 50%, 0.3) 0px, transparent 50%),
                 radial-gradient(at 10% 20%, hsla(35, 100%, 50%, 0.3) 0px, transparent 50%),
                 radial-gradient(at 50% 50%, hsla(260, 50%, 30%, 0.2) 0px, transparent 50%);
-            background-size: 200% 200%; /* Nagyobb méret az animációhoz */
+            background-size: 200% 200%;
             animation: backgroundPan 40s ease infinite;
         }
 
-        /* === Konténer beúszó animáció === */
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: translateY(20px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* === "Üveg" hatású konténer === */
-        .modal-container {
-            width: 100%;
-            max-width: 600px;
-            background-color: var(--color-container-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 3rem 3.5rem;
-            box-shadow: 
-                0 4px 60px var(--color-shadow-dark),
-                0 1px 0px var(--color-shadow-light) inset;
-            border: 1px solid var(--color-border);
-            text-align: center;
-            animation: fadeInScale 0.8s ease-out;
-            position: relative;
-        }
-
-        /* === Tartalom === */
-        .modal-container h1 {
+        /* === Címek === */
+        .step-title,
+        #loading-step h1 {
             font-weight: 700;
             font-size: 2.2rem;
             color: var(--color-text-primary);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             line-height: 1.3;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.7);
         }
 
-        .modal-container p {
+        /* === Betöltő képernyő szövege === */
+        #loading-step p {
             font-size: 1.1rem;
             font-weight: 400;
             color: var(--color-text-secondary);
             line-height: 1.6;
-            margin-bottom: 2.5rem;
+            margin-bottom: 1rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        
+        #loading-step p:last-of-type {
+             margin-bottom: 2.5rem;
+        }
+
+        /* === Gomb Rácsok === */
+        .user-grid, .language-grid {
+            display: grid;
+            gap: 1rem;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+        .user-grid {
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        }
+        .language-grid {
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        }
+
+        /* === Gomb és Link stílusok (ÜVEG HATÁSSAL) === */
+        .user-btn, .language-link {
+            background-color: var(--color-button-bg);
+            border: 1px solid var(--color-button-border);
+            color: var(--color-text-primary);
+            padding: 0.9rem 1.5rem;
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+            transition: all 0.2s ease-out;
+            
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .user-btn:hover, .language-link:hover {
+            background-color: var(--color-button-hover-bg);
+            border-color: var(--color-primary-orange);
+            transform: translateY(-2px);
+        }
+        .user-btn.active {
+            background-color: var(--color-primary-orange);
+            color: var(--color-background-dark);
+            border-color: var(--color-primary-orange);
+            transform: translateY(-2px);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        /* === Lépések animációval (JAVÍTOTT LOGIKA A "VILLANÁS" ELLEN) === */
+        .step-content {
+            grid-row: 2 / 3;
+            grid-column: 1 / 2;
+            
+            /* ALAPBÓL REJTETT */
+            opacity: 0; 
+            pointer-events: none;
+            transform: translateY(10px);
+            
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            will-change: opacity, transform;
+        }
+
+        /* AZ AKTÍV LÉPÉS STÍLUSA */
+        .step-content.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            /* Animáció csak a láthatóvá váláskor */
+            animation: fadeInScale 0.6s ease-out; 
+        }
+
+        /* === Vissza gomb === */
+        .back-button-wrapper {
+            grid-row: 1 / 2;
+            grid-column: 1 / 2;
+            text-align: left;
+            padding-bottom: 0.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+            width: 100%;
+            max-width: 750px; /* Igazodik a tartalomhoz */
+            margin: 0 auto;
+        }
+        .back-button-wrapper.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #back-btn {
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.2s ease-out;
+            margin-left: -0.5rem;
+            padding: 0.5rem;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.7);
+        }
+        #back-btn:hover {
+            color: var(--color-primary-orange);
+        }
+        #back-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.5;
+            transition: transform 0.2s ease-out;
+        }
+        #back-btn:hover svg {
+            transform: translateX(-3px);
+        }
+
         /* === Loader animáció === */
         @keyframes rotatingLoader {
             0% { transform: rotate(0deg); }
@@ -111,7 +222,6 @@
             70% { box-shadow: 0 0 0 20px rgba(255, 140, 0, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 140, 0, 0); }
         }
-
         .loader-wrapper {
             display: flex;
             justify-content: center;
@@ -129,28 +239,72 @@
                          pulseOrange 2s ease-out infinite 0.5s;
         }
 
-        /* === Reszponzív === */
-        @media (max-width: 600px) {
-            .modal-container {
-                padding: 2.5rem 1.5rem;
-            }
-            .modal-container h1 {
+        /* === Reszponzív töréspontok === */
+        @media (max-width: 650px) {
+            .step-title, #loading-step h1 {
                 font-size: 1.8rem;
+                margin-bottom: 1.5rem;
             }
-            .modal-container p {
+            .user-grid, .language-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            .user-btn, .language-link {
+                padding: 0.8rem 1rem;
+                font-size: 0.95rem;
+                height: 45px;
+            }
+            #loading-step p {
                 font-size: 1rem;
-                margin-bottom: 2rem;
             }
             .loader {
                 width: 50px;
                 height: 50px;
             }
         }
+        @media (max-width: 400px) {
+             .user-grid, .language-grid {
+                 grid-template-columns: 1fr; /* Egy oszlop mobilon */
+            }
+        }
+
     </style>
 </head>
 <body>
+    
+    <div class="back-button-wrapper" id="back-button-wrapper">
+        <button id="back-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+            </svg>
+            Back
+        </button>
+    </div>
 
-    <div class="modal-container">
+    <div id="person-step" class="step-content is-visible">
+        <h1 class="step-title">Who will present?</h1>
+        <div class="user-grid">
+            <button class="user-btn" data-person-value="csilla">Csilla</button>
+            <button class="user-btn" data-person-value="kata">Kata</button>
+            <button class="user-btn" data-person-value="zita">Zita</button>
+            <button class="user-btn" data-person-value="robi">Robi</button>
+            <button class="user-btn" data-person-value="krisztian">Krisztián</button>
+            <button class="user-btn" data-person-value="imi">Imi</button>
+            <button class="user-btn" data-person-value="emil">Emil</button>
+        </div>
+    </div>
+
+    <div id="language-step" class="step-content">
+        <h1 class="step-title">Which language will you present in?</h1>
+        <div class="language-grid">
+            <button class="language-link" data-lang-value="hu">Hungarian</button>
+            <button class="language-link" data-lang-value="en">English</button>
+            <button class="language-link" data-lang-value="de">German</button>
+            <button class="language-link" data-lang-value="ro">Romanian</button>
+        </div>
+    </div>
+
+    <div id="loading-step" class="step-content">
         <h1 id="status-title">Generálás folyamatban...</h1>
         <p id="status-text">
             A személyre szabott elemzésed készül. Ne aggódj, az oldal automatikusan frissülni fog, amint elkészült.
@@ -162,20 +316,114 @@
         </div>
     </div>
 
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
             // --- Beállítások ---
-            const DESTINATION_URL = 'index.html'; // A célfájl, amit az n8n generál
+            const WEBHOOK_BASE_URL = "https://n8n.onsiteretargeting.com/webhook/demo-generation";
+            const REDIRECT_URL = 'index.html'; // A célfájl, amit az n8n generál
             const FINAL_PAGE_KEY = 'data-placeholder="pageTitle"'; // Ezt keressük a kész fájlban
-            const POLLING_INTERVAL = 40000; // 5 másodpercenként ellenőriz
-            const titleElement = document.getElementById('status-title');
-            const textElement = document.getElementById('status-text');
+            const POLLING_INTERVAL = 5000; // 5 másodpercenként ellenőriz
+            const INITIAL_DELAY = 3000; // Első ellenőrzés 3 mp múlva
 
-            // --- Polling Logika ---
-            function checkStatus() {
+            // --- Változók ---
+            let selectedPerson = null; 
+            let activeUserButton = null;
+
+            // --- DOM Elemek ---
+            const personStep = document.getElementById('person-step');
+            const languageStep = document.getElementById('language-step');
+            const loadingStep = document.getElementById('loading-step');
+            const backButtonWrapper = document.getElementById('back-button-wrapper');
+            
+            const allUserButtons = document.querySelectorAll('.user-btn');
+            const allLanguageLinks = document.querySelectorAll('.language-link');
+            const backBtn = document.getElementById('back-btn');
+
+            const statusTitle = document.getElementById('status-title');
+            const statusText = document.getElementById('status-text');
+
+            // --- 1. LÉPÉS: ELŐADÓ VÁLASZTÁSA ---
+            allUserButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    selectedPerson = button.dataset.personValue;
+                    
+                    if (activeUserButton) {
+                        activeUserButton.classList.remove('active');
+                    }
+                    activeUserButton = button;
+                    activeUserButton.classList.add('active');
+
+                    // JAVÍTVA: Váltás a 2. lépésre .is-visible használatával
+                    personStep.classList.remove('is-visible');
+                    setTimeout(() => { 
+                        languageStep.classList.add('is-visible');
+                        backButtonWrapper.classList.add('is-visible');
+                    }, 300);
+                });
+            });
+            
+            // --- VISSZA GOMB: 2. LÉPÉSRŐL AZ 1.-RE ---
+            backBtn.addEventListener('click', () => {
+                // JAVÍTVA: .is-visible használatával
+                languageStep.classList.remove('is-visible');
+
+                backButtonWrapper.classList.remove('is-visible');
+                setTimeout(() => { 
+                    personStep.classList.add('is-visible');
+                }, 300);
+
+                if (activeUserButton) {
+                    activeUserButton.classList.remove('active');
+                    activeUserButton = null;
+                }
+                selectedPerson = null; 
+            });
+
+            // --- 2. LÉPÉS: NYELV VÁLASZTÁSA ---
+            allLanguageLinks.forEach(button => {
+                button.addEventListener('click', () => {
+                    if (!selectedPerson) return; // Biztonsági ellenőrzés
+
+                    const selectedLanguage = button.dataset.langValue;
+                    
+                    // A DINAMIKUS URL LÉTREHOZÁSA MEGMARADT
+                    const finalWebhookUrl = `${WEBHOOK_BASE_URL}?person=${selectedPerson}&language=${selectedLanguage}`;
+
+                    // JAVÍTVA: Váltás a 3. (Töltő) lépésre .is-visible használatával
+                    languageStep.classList.remove('is-visible');
+                    backButtonWrapper.classList.remove('is-visible'); // Vissza gomb elrejtése
+                    
+                    setTimeout(() => {
+                        loadingStep.classList.add('is-visible');
+                    }, 300);
+
+                    // 1. Webhook indítása a háttérben
+                    // Ez a logika változatlan maradt
+                    try {
+                        fetch(finalWebhookUrl, { mode: 'no-cors' }); 
+                    } catch (error) {
+                        console.warn("Webhook trigger hiba (no-cors mód miatt ez várható):", error);
+                    }
+
+                    // 2. Polling (státusz ellenőrzés) indítása
+                    // Ez a logika is változatlan maradt
+                    startPolling(REDIRECT_URL);
+                });
+            });
+
+            // --- 3. LÉPÉS: POLLING (VÁRAKOZÁS) LOGIKA ---
+            // Ez a rész teljesen változatlan maradt
+
+            function startPolling(destinationUrl) {
+                // Az ellenőrzés indítása X másodperc késleltetéssel
+                setTimeout(() => checkStatus(destinationUrl), INITIAL_DELAY);
+            }
+            
+            function checkStatus(destinationUrl) {
                 // Cache-törlő trükk
-                const urlToFetch = DESTINATION_URL + '?t=' + new Date().getTime();
+                const urlToFetch = destinationUrl + '?t=' + new Date().getTime();
 
                 fetch(urlToFetch, { cache: "no-store" })
                     .then(response => {
@@ -187,32 +435,27 @@
                     .then(html => {
                         // SIKER: Ha a letöltött HTML tartalmazza a kulcsszót
                         if (html.includes(FINAL_PAGE_KEY)) {
-                            if (titleElement) titleElement.textContent = 'Siker! Átirányítás...';
-                            if (textElement) textElement.textContent = 'Az elemzésed elkészült, egy pillanat és mutatom.';
+                            if (statusTitle) statusTitle.textContent = 'Siker! Átirányítás...';
+                            if (statusText) statusText.textContent = 'Az elemzésed elkészült, egy pillanat és mutatom.';
                             
                             // Átirányítás a VÉGSŐ oldalra
                             setTimeout(() => {
-                                window.location.href = DESTINATION_URL; 
+                                window.location.href = destinationUrl; 
                             }, 1000); 
 
                         } else {
-                            // MÉG NEM KÉSZ: Várunk 5 mp-t és újrapróbáljuk
-                            setTimeout(checkStatus, POLLING_INTERVAL);
+                            // MÉG NEM KÉSZ: Várunk és újrapróbáljuk
+                            setTimeout(() => checkStatus(destinationUrl), POLLING_INTERVAL);
                         }
                     })
                     .catch(error => {
-                        // HIBA ESETÉN: 5 mp múlva újrapróbáljuk
+                        // HIBA ESETÉN: Várunk és újrapróbáljuk
                         console.error("Hiba az ellenőrzés során:", error);
-                        setTimeout(checkStatus, POLLING_INTERVAL);
+                        setTimeout(() => checkStatus(destinationUrl), POLLING_INTERVAL);
                     });
             }
-
-            // Az ellenőrzés indítása 3 másodperc késleltetéssel
-            setTimeout(checkStatus, 20000);
-
         });
     </script>
+
 </body>
 </html>
-
-
