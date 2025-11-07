@@ -467,6 +467,7 @@
             });
 
             // --- STEP 3: ENTER DOMAIN & GENERATE ---
+          // --- STEP 3: ENTER DOMAIN & GENERATE ---
             generateBtn.addEventListener('click', () => {
                 const selectedDomain = domainInput.value;
 
@@ -480,7 +481,7 @@
                 generateBtn.disabled = true;
                 generateBtn.textContent = 'Generating...';
 
-                // Build the final webhook URL
+                // Build the final webhook URL (EZ A RÉSZ VÁLTOZATLAN)
                 const finalWebhookUrl = `${WEBHOOK_BASE_URL}?person=${selectedPerson}&language=${selectedLanguage}&domain=${encodeURIComponent(selectedDomain)}`;
 
                 // Go to Step 4 (Loading)
@@ -491,14 +492,18 @@
                     loadingStep.classList.add('is-visible');
                 }, 300);
 
-                // 1. Trigger Webhook
+                // 1. Trigger Webhook (JAVÍTVA: "Image ping" hack a fetch helyett)
                 try {
-                    fetch(finalWebhookUrl, { mode: 'no-cors' }); 
+                    // Ez létrehoz egy új kép elemet a memóriában.
+                    // A 'src' beállítása elindít egy GET kérést az URL-re.
+                    // Ez egy megbízható "fire-and-forget" metódus, ami kikerüli a CORS/mixed-content problémákat.
+                    const img = new Image();
+                    img.src = finalWebhookUrl;
                 } catch (error) {
-                    console.warn("Webhook trigger error (this is expected in 'no-cors' mode):", error);
+                    console.warn("Webhook trigger error:", error);
                 }
 
-                // 2. Start Polling
+                // 2. Start Polling (EZ A RÉSZ VÁLTOZATLAN)
                 startPolling(REDIRECT_URL);
             });
 
@@ -575,5 +580,6 @@
 
 </body>
 </html>
+
 
 
