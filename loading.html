@@ -84,7 +84,7 @@
             gap: 1.5rem; 
 
             animation: fadeInScale 0.7s ease-out;
-            margin-bottom: 3rem; /* Hely a "Previous" gombnak */
+            margin-bottom: 3rem;
         }
         
         /* === LÉPÉSJELZŐ SÁV (4 LÉPÉS) === */
@@ -415,7 +415,7 @@
                          pulseOrange 2s ease-out infinite 0.5s;
         }
         
-        /* === Previous Generations Modal (VISSZAKERÜLT) === */
+        /* === Previous Generations Modal === */
         
         .previous-btn {
             position: absolute;
@@ -816,12 +816,13 @@
             
             // --- Settings ---
             const WEBHOOK_BASE_URL = "https://n8n.onsiteretargeting.com/webhook/demo-generation";
-            const REPO_BASE_URL = 'thisisoptimonk.github.io/'; // (HTTPS protokoll eltávolítva a kérésedre)
+            const REPO_BASE_URL = 'thisisoptimonk.github.io/'; 
             const FINAL_PAGE_KEY = 'data-placeholder="pageTitle"';
             const POLLING_INTERVAL = 15000;
             const INITIAL_DELAY = 90000;
 
-            // --- ADATBÁZIS (VISSZAKERÜLT) ---
+            // --- ADATBÁZIS (N8N ÁLTAL AUTOMATIKUSAN FRISSÍTVE) ---
+            // N8N_DATA_START
             const previousGenerationsData = {
                 'csilla': [
                     { displayName: 'Florex kert', fileName: 'Florex kert.html' },
@@ -849,6 +850,7 @@
                     { displayName: 'Emil Analízis', fileName: 'emil-analizis.html' }
                 ]
             };
+            // N8N_DATA_END
 
 
             // --- State Variables ---
@@ -885,7 +887,7 @@
             const languageSelection = document.getElementById('language-selection');
             const domainSelection = document.getElementById('domain-selection'); 
 
-            // --- DOM ELEMEK A MODALHOZ (VISSZAKERÜLT) ---
+            // --- DOM ELEMEK A MODALHOZ ---
             const showPreviousBtn = document.getElementById('show-previous-btn');
             const modalOverlay = document.getElementById('previous-modal-overlay');
             const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -993,7 +995,7 @@
                 }
 
                 // 2. Start Polling
-                const dynamicRedirectUrl = `${REPO_BASE_URL}${selectedPerson}/index.html`; // Itt is protokoll nélkül
+                const dynamicRedirectUrl = `${REPO_BASE_URL}${selectedPerson}/index.html`;
                 startPolling(dynamicRedirectUrl);
             });
 
@@ -1032,13 +1034,11 @@
 
             // --- STEP 4: POLLING LOGIC ---
             function startPolling(destinationUrl) {
-                // A pollinghoz kell a protokoll, különben a fetch relatív URL-nek veszi
                 const urlWithProtocol = `https://${destinationUrl}`;
                 setTimeout(() => checkStatus(urlWithProtocol), INITIAL_DELAY);
             }
             
             function checkStatus(destinationUrl) {
-                // A 'destinationUrl' már tartalmazza a 'https://'-t
                 const urlToFetch = destinationUrl + '?t=' + new Date().getTime();
 
                 fetch(urlToFetch, { cache: "no-store" })
@@ -1055,7 +1055,7 @@
                             if (statusText) statusText.textContent = 'Your analysis is ready. We are redirecting you now.';
                             
                             setTimeout(() => {
-                                window.location.href = destinationUrl; // Itt már a protokollos URL-re irányítunk
+                                window.location.href = destinationUrl; 
                             }, 1000); 
 
                         } else {
@@ -1070,7 +1070,7 @@
                     });
             }
             
-            // --- MODAL LOGIKA (VISSZAKERÜLT) ---
+            // --- MODAL LOGIKA ---
             
             // 1. Modal megnyitása
             showPreviousBtn.addEventListener('click', () => {
@@ -1113,7 +1113,7 @@
                 });
             });
 
-            // 6. Lista feltöltő funkció (MÓDOSÍTVA)
+            // 6. Lista feltöltő funkció
             function populatePresentationList(personKey, personName) {
                 modalListTitle.textContent = `${personName}'s Generations`;
                 modalListContainer.innerHTML = ''; 
@@ -1125,11 +1125,11 @@
                     modalListContainer.innerHTML = `<div class="no-presentations">No previous presentations found for ${personName}.</div>`;
                 } else {
                     presentations.forEach(pres => {
-                        // === ITT A KÉRT MÓDOSÍTÁS (https:// nélkül) ===
+                        // Itt van a kért módosítás: a protokoll (https://) nélkül építjük fel az URL-t
                         const url = `${REPO_BASE_URL}${personKey}/${encodeURIComponent(pres.fileName)}`;
                         
                         const link = document.createElement('a');
-                        link.href = `https://${url}`; // A kattintható linkhez azért hozzáadjuk a protokollt
+                        link.href = `https://${url}`; // A kattintható linkhez azért kell a protokoll
                         link.target = '_blank'; 
                         link.className = 'presentation-item';
                         link.textContent = pres.displayName;
@@ -1146,7 +1146,7 @@
                 }
             }
             
-            // --- MODAL KERESŐ LOGIKA (VISSZAKERÜLT) ---
+            // --- MODAL KERESŐ LOGIKA ---
             modalSearchInput.addEventListener('input', () => {
                 const searchTerm = modalSearchInput.value.toLowerCase().trim();
                 const allItems = modalListContainer.querySelectorAll('.presentation-item');
